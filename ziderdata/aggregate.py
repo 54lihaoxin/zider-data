@@ -39,9 +39,9 @@ CREATE_SCHEMA = '''
         simplified  TEXT    NOT NULL UNIQUE,
         frequency   INTEGER,
         pos         TEXT,
+        hsk_old     INTEGER,
         hsk_new     INTEGER,
-        hsk_newest  INTEGER,
-        hsk_old     INTEGER
+        hsk_newest  INTEGER
     );
 
     CREATE TABLE hsk_word_forms (
