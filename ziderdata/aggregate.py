@@ -14,9 +14,9 @@ CREATE_SCHEMA = '''
         id                INTEGER PRIMARY KEY,
         character         TEXT    NOT NULL UNIQUE,
         pinyin            TEXT,
-        decomposition     TEXT,
-        radical           TEXT,
         stroke_count      INTEGER,
+        radical           TEXT,
+        decomposition     TEXT,
         etymology_type_id INTEGER REFERENCES mmah_etymology_types(id)
     );
 
