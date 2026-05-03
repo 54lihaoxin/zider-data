@@ -54,7 +54,7 @@ class TestEncodeMedian(unittest.TestCase):
 
     def test_byte_size(self):
         median = [[1, 2], [3, 4], [5, 6]]
-        self.assertEqual(len(encode_median(median)), 3 * 4)
+        self.assertEqual(len(encode_median(median)), 9)  # 3 points × 22 bits = 66 bits → 9 bytes
 
 
 if __name__ == '__main__':
