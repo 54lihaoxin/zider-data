@@ -83,7 +83,7 @@ def build_database(
     hsk_entries: list[HskEntry],
     output_dir: Path,
 ) -> None:
-    db_path = output_dir / 'zider.sqlite'
+    db_path = output_dir / 'zider-data.sqlite'
     if db_path.exists():
         db_path.unlink()
 

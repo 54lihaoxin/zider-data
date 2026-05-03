@@ -46,4 +46,4 @@ python3 -m unittest tests.test_makemeahanzi_dictionary.TestParseDictionary.test_
 
 ## Output
 
-`output/zider.sqlite` is a read-only reference database bundled into the Zider iOS app.
+`output/zider-data.sqlite` is a read-only reference database bundled into the Zider iOS app.

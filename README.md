@@ -4,12 +4,12 @@ Data pipeline for the [Zider](https://github.com/54lihaoxin/zider) iOS app — a
 
 ## What this produces
 
-`output/zider.sqlite` — a read-only reference database bundled into the Zider iOS app, covering ~9500 Chinese characters and ~11500 HSK vocabulary words. Character data includes stroke order paths, pinyin, definitions, decomposition, radical, and stroke count. Word data includes HSK levels, pinyin, meanings, classifiers, and parts of speech.
+`output/zider-data.sqlite` — a read-only reference database bundled into the Zider iOS app, covering ~9500 Chinese characters and ~11500 HSK vocabulary words. Character data includes stroke order paths, pinyin, definitions, decomposition, radical, and stroke count. Word data includes HSK levels, pinyin, meanings, classifiers, and parts of speech.
 
 Pre-built releases are available on the [Releases page](https://github.com/54lihaoxin/zider-data/releases). The latest database can be downloaded directly at:
 
 ```
-https://github.com/54lihaoxin/zider-data/releases/latest/download/zider.sqlite.gz
+https://github.com/54lihaoxin/zider-data/releases/latest/download/zider-data.sqlite.gz
 ```
 
 ## Usage
