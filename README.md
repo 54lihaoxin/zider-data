@@ -166,12 +166,12 @@ func decodeMedian(_ data: Data) -> [[Int]] {
 }
 ```
 
-## Licenses
+## Data Sources and Licenses
 
 Pipeline scripts are MIT licensed. Data files retain their upstream licenses:
 
-| Source | License |
-|---|---|
-| HSK vocabulary (`complete-hsk-vocabulary`) | [MIT](LICENSES/MIT-complete-hsk-vocabulary.txt) |
-| Make Me A Hanzi (`dictionary.txt`) | [LGPL v3+](LICENSES/LGPL-3.0.txt) |
-| Make Me A Hanzi (`graphics.txt`) | [Arphic Public License](LICENSES/ARPHICPL.TXT) |
+| Dataset | Repository | License |
+|---|---|---|
+| HSK vocabulary | [drkameleon/complete-hsk-vocabulary](https://github.com/drkameleon/complete-hsk-vocabulary) | [MIT](LICENSES/MIT-complete-hsk-vocabulary.txt) |
+| Character dictionary (`dictionary.txt`) | [skishore/makemeahanzi](https://github.com/skishore/makemeahanzi) | [LGPL v3+](LICENSES/LGPL-3.0.txt) |
+| Character stroke data (`graphics.txt`) | [skishore/makemeahanzi](https://github.com/skishore/makemeahanzi) | [Arphic Public License](LICENSES/ARPHICPL.TXT) |
