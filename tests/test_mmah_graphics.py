@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from ziderdata.makemeahanzi_graphics import parse
+from ziderdata.mmah_graphics import parse
 
 
 class TestParseGraphics(unittest.TestCase):

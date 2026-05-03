@@ -3,15 +3,15 @@ from io import StringIO
 from unittest.mock import patch
 
 from ziderdata.aggregate import validate
-from ziderdata.schema import DictionaryEntry, GraphicsEntry
+from ziderdata.schema import MmahDictionaryEntry, MmahGraphicsEntry
 
 
-def _dict_entry(char: str) -> DictionaryEntry:
-    return DictionaryEntry(character=char, pinyin=['pīn'], definition='test')
+def _dict_entry(char: str) -> MmahDictionaryEntry:
+    return MmahDictionaryEntry(character=char, pinyin=['pīn'], definition='test')
 
 
-def _graphics_entry(char: str) -> GraphicsEntry:
-    return GraphicsEntry(character=char, strokes=['M 1 1 Z'], medians=[[[1, 1]]])
+def _graphics_entry(char: str) -> MmahGraphicsEntry:
+    return MmahGraphicsEntry(character=char, strokes=['M 1 1 Z'], medians=[[[1, 1]]])
 
 
 class TestValidate(unittest.TestCase):

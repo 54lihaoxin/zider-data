@@ -41,7 +41,7 @@ python3 -m unittest discover tests
 
 Run a single test:
 ```
-python3 -m unittest tests.test_makemeahanzi_dictionary.TestParseDictionary.test_full_entry
+python3 -m unittest tests.test_mmah_dictionary.TestParseDictionary.test_full_entry
 ```
 
 ## Output

@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from ziderdata.makemeahanzi_dictionary import parse
+from ziderdata.mmah_dictionary import parse
 
 
 class TestParseDictionary(unittest.TestCase):

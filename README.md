@@ -27,6 +27,76 @@ python3 -m unittest discover tests
 
 See [CLAUDE.md](CLAUDE.md) for full developer documentation.
 
+## Database schema
+
+### `hsk_words`
+
+One row per HSK vocabulary entry.
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | INTEGER PK | Auto-assigned row ID |
+| `simplified` | TEXT | Simplified Chinese, e.g. `中国` |
+| `frequency` | INTEGER | Corpus frequency rank (lower = more frequent); NULL if unknown |
+| `pos` | TEXT | Pipe-separated parts of speech, e.g. `noun\|verb` |
+| `hsk_new` | INTEGER | HSK level under the 2021 standard (1–9); NULL if not listed |
+| `hsk_newest` | INTEGER | HSK level under the 2024 standard (1–9); NULL if not listed |
+| `hsk_old` | INTEGER | HSK level under the pre-2021 standard (1–6); NULL if not listed |
+
+### `hsk_word_forms`
+
+One row per pronunciation/meaning variant. Words with multiple readings have multiple forms.
+
+| Column | Type | Description |
+|---|---|---|
+| `word_id` | INTEGER FK | References `hsk_words.id` |
+| `form_index` | INTEGER | Zero-based position among the word's forms |
+| `pinyin` | TEXT | Pinyin with tone marks, e.g. `zhōng guó` |
+| `classifiers` | TEXT | Pipe-separated measure words (量词), e.g. `个\|位` |
+| `meanings` | TEXT | Pipe-separated English definitions |
+
+Primary key is `(word_id, form_index)`.
+
+### `mmah_characters`
+
+One row per Chinese character.
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | INTEGER PK | Auto-assigned row ID |
+| `character` | TEXT | The character, e.g. `中` |
+| `pinyin` | TEXT | Space-separated readings, e.g. `zhōng guó` |
+| `definition` | TEXT | English definition |
+| `decomposition` | TEXT | Component breakdown using Ideographic Description Characters |
+| `radical` | TEXT | Kangxi radical |
+| `stroke_count` | INTEGER | Number of strokes |
+| `etymology_type_id` | INTEGER FK | References `mmah_etymology_types.id`; NULL if unknown |
+| `etymology_hint` | TEXT | Free-text etymology note |
+| `etymology_semantic` | TEXT | Semantic component (pictophonetic characters) |
+| `etymology_phonetic` | TEXT | Phonetic component (pictophonetic characters) |
+
+### `mmah_etymology_types`
+
+Lookup table for etymology categories.
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | INTEGER PK | Auto-assigned |
+| `name` | TEXT | Category name, e.g. `pictographic`, `ideographic`, `pictophonetic` |
+
+### `mmah_strokes`
+
+One row per stroke, in stroke order. Paths and medians are stored as compact bit-stream BLOBs — see [Stroke binary format](#stroke-binary-format) below.
+
+| Column | Type | Description |
+|---|---|---|
+| `character_id` | INTEGER FK | References `mmah_characters.id` |
+| `stroke_index` | INTEGER | Zero-based position in stroke order |
+| `path` | BLOB | Encoded SVG path (M/L/Q/C/Z commands) |
+| `median` | BLOB | Encoded centerline points `[[x, y] …]` for animation |
+
+Primary key is `(character_id, stroke_index)`.
+
 ## Stroke binary format
 
 Stroke paths and medians are stored as compact bit streams (MSB first) in the `strokes` table.
@@ -103,5 +173,5 @@ Pipeline scripts are MIT licensed. Data files retain their upstream licenses:
 | Source | License |
 |---|---|
 | HSK vocabulary (`complete-hsk-vocabulary`) | [MIT](LICENSES/MIT-complete-hsk-vocabulary.txt) |
-| Make Me A Hanzi (`graphics.txt`) | [Arphic Public License](LICENSES/ARPHICPL.TXT) |
 | Make Me A Hanzi (`dictionary.txt`) | [LGPL v3+](LICENSES/LGPL-3.0.txt) |
+| Make Me A Hanzi (`graphics.txt`) | [Arphic Public License](LICENSES/ARPHICPL.TXT) |
