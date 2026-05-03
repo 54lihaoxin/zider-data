@@ -10,3 +10,6 @@ requires-python = ">=3.9"
 dependencies = [
     "opencc-python-reimplemented",
 ]
+
+[tool.setuptools.packages.find]
+include = ["ziderdata*"]
