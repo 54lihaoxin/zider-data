@@ -66,14 +66,10 @@ One row per Chinese character.
 | `id` | INTEGER PK | Auto-assigned row ID |
 | `character` | TEXT | The character, e.g. `中` |
 | `pinyin` | TEXT | Space-separated readings, e.g. `zhōng guó` |
-| `definition` | TEXT | English definition |
 | `decomposition` | TEXT | Component breakdown using Ideographic Description Characters |
 | `radical` | TEXT | Kangxi radical |
 | `stroke_count` | INTEGER | Number of strokes |
 | `etymology_type_id` | INTEGER FK | References `mmah_etymology_types.id`; NULL if unknown |
-| `etymology_hint` | TEXT | Free-text etymology note |
-| `etymology_semantic` | TEXT | Semantic component (pictophonetic characters) |
-| `etymology_phonetic` | TEXT | Phonetic component (pictophonetic characters) |
 
 ### `mmah_etymology_types`
 
