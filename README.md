@@ -37,6 +37,7 @@ One row per HSK vocabulary entry.
 |---|---|---|
 | `id` | INTEGER PK | Auto-assigned row ID |
 | `simplified` | TEXT | Simplified Chinese, e.g. `中国` |
+| `traditional` | TEXT | Traditional Chinese, e.g. `中國` |
 | `frequency` | INTEGER | Corpus frequency rank (lower = more frequent); NULL if unknown |
 | `pos` | TEXT | Pipe-separated parts of speech, e.g. `noun\|verb` |
 | `hsk_old` | INTEGER | HSK level under the pre-2021 standard (1–6); NULL if not listed |

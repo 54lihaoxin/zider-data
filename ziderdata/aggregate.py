@@ -3,8 +3,11 @@ from __future__ import annotations
 import sqlite3
 from pathlib import Path
 
+from opencc import OpenCC
 from ziderdata.encoding import encode_median, encode_path
 from ziderdata.schema import MmahDictionaryEntry, MmahGraphicsEntry, HskEntry
+
+_s2t = OpenCC('s2t')
 
 CREATE_SCHEMA = '''
     CREATE TABLE mmah_characters (
@@ -33,6 +36,7 @@ CREATE_SCHEMA = '''
     CREATE TABLE hsk_words (
         id          INTEGER PRIMARY KEY,
         simplified  TEXT    NOT NULL UNIQUE,
+        traditional TEXT    NOT NULL,
         frequency   INTEGER,
         pos         TEXT,
         hsk_old     INTEGER,
@@ -117,8 +121,8 @@ def build_database(
 
     for entry in hsk_entries:
         cursor = conn.execute(
-            'INSERT INTO hsk_words (simplified, frequency, pos, hsk_new, hsk_newest, hsk_old) VALUES (?, ?, ?, ?, ?, ?)',
-            (entry.simplified, entry.frequency, '|'.join(entry.pos) if entry.pos else None, entry.hsk_new, entry.hsk_newest, entry.hsk_old),
+            'INSERT INTO hsk_words (simplified, traditional, frequency, pos, hsk_old, hsk_new, hsk_newest) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            (entry.simplified, _s2t.convert(entry.simplified), entry.frequency, '|'.join(entry.pos) if entry.pos else None, entry.hsk_old, entry.hsk_new, entry.hsk_newest),
         )
         word_id = cursor.lastrowid
 
@@ -148,6 +152,11 @@ def run(
 ) -> None:
     dictionary = {e.character: e for e in mmah_dictionary_entries}
     graphics = {e.character: e for e in mmah_graphics_entries}
-    hsk_chars = {char for entry in hsk_entries for char in entry.simplified}
+    hsk_chars = {
+        char
+        for entry in hsk_entries
+        for text in (entry.simplified, _s2t.convert(entry.simplified))
+        for char in text
+    }
     valid_chars = [c for c in validate(dictionary, graphics) if c in hsk_chars]
     build_database(valid_chars, dictionary, graphics, hsk_entries, output_dir)
