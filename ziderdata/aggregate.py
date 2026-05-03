@@ -7,7 +7,7 @@ from ziderdata.encoding import encode_median, encode_path
 from ziderdata.schema import DictionaryEntry, GraphicsEntry, HskEntry
 
 CREATE_SCHEMA = '''
-    CREATE TABLE characters (
+    CREATE TABLE mmah_characters (
         id                  INTEGER PRIMARY KEY,
         character           TEXT    NOT NULL UNIQUE,
         pinyin              TEXT,
@@ -15,26 +15,26 @@ CREATE_SCHEMA = '''
         decomposition       TEXT,
         radical             TEXT,
         stroke_count        INTEGER,
-        etymology_type_id   INTEGER REFERENCES etymology_types(id),
+        etymology_type_id   INTEGER REFERENCES mmah_etymology_types(id),
         etymology_hint      TEXT,
         etymology_semantic  TEXT,
         etymology_phonetic  TEXT
     );
 
-    CREATE TABLE etymology_types (
+    CREATE TABLE mmah_etymology_types (
         id      INTEGER PRIMARY KEY,
         name    TEXT    NOT NULL UNIQUE
     );
 
-    CREATE TABLE strokes (
-        character_id    INTEGER NOT NULL REFERENCES characters(id),
+    CREATE TABLE mmah_strokes (
+        character_id    INTEGER NOT NULL REFERENCES mmah_characters(id),
         stroke_index    INTEGER NOT NULL,
         path            BLOB    NOT NULL,
         median          BLOB    NOT NULL,
         PRIMARY KEY (character_id, stroke_index)
     ) WITHOUT ROWID;
 
-    CREATE TABLE words (
+    CREATE TABLE hsk_words (
         id          INTEGER PRIMARY KEY,
         simplified  TEXT    NOT NULL UNIQUE,
         frequency   INTEGER,
@@ -44,8 +44,8 @@ CREATE_SCHEMA = '''
         hsk_old     INTEGER
     );
 
-    CREATE TABLE word_forms (
-        word_id     INTEGER NOT NULL REFERENCES words(id),
+    CREATE TABLE hsk_word_forms (
+        word_id     INTEGER NOT NULL REFERENCES hsk_words(id),
         form_index  INTEGER NOT NULL,
         pinyin      TEXT,
         classifiers TEXT,
@@ -92,7 +92,7 @@ def build_database(
 
     etymology_type_ids = _collect_etymology_types(characters, dictionary)
     for name, eid in etymology_type_ids.items():
-        conn.execute('INSERT INTO etymology_types (id, name) VALUES (?, ?)', (eid, name))
+        conn.execute('INSERT INTO mmah_etymology_types (id, name) VALUES (?, ?)', (eid, name))
 
     for char in characters:
         d = dictionary[char]
@@ -101,7 +101,7 @@ def build_database(
 
         ety_type = ety.get('type')
         cursor = conn.execute(
-            '''INSERT INTO characters
+            '''INSERT INTO mmah_characters
                (character, pinyin, definition, decomposition, radical, stroke_count,
                 etymology_type_id, etymology_hint, etymology_semantic, etymology_phonetic)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
@@ -122,20 +122,20 @@ def build_database(
 
         for i, (path, median) in enumerate(zip(g.strokes, g.medians)):
             conn.execute(
-                'INSERT INTO strokes (character_id, stroke_index, path, median) VALUES (?, ?, ?, ?)',
+                'INSERT INTO mmah_strokes (character_id, stroke_index, path, median) VALUES (?, ?, ?, ?)',
                 (character_id, i, encode_path(path), encode_median(median)),
             )
 
     for entry in hsk_entries:
         cursor = conn.execute(
-            'INSERT INTO words (simplified, frequency, pos, hsk_new, hsk_newest, hsk_old) VALUES (?, ?, ?, ?, ?, ?)',
+            'INSERT INTO hsk_words (simplified, frequency, pos, hsk_new, hsk_newest, hsk_old) VALUES (?, ?, ?, ?, ?, ?)',
             (entry.simplified, entry.frequency, '|'.join(entry.pos) if entry.pos else None, entry.hsk_new, entry.hsk_newest, entry.hsk_old),
         )
         word_id = cursor.lastrowid
 
         for i, form in enumerate(entry.forms):
             conn.execute(
-                'INSERT INTO word_forms (word_id, form_index, pinyin, classifiers, meanings) VALUES (?, ?, ?, ?, ?)',
+                'INSERT INTO hsk_word_forms (word_id, form_index, pinyin, classifiers, meanings) VALUES (?, ?, ?, ?, ?)',
                 (
                     word_id,
                     i,
