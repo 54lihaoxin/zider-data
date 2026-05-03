@@ -12,6 +12,7 @@ Pipeline scripts are MIT licensed. Data files retain their upstream licenses:
 
 | Source | License |
 |---|---|
+| HSK vocabulary (`complete-hsk-vocabulary`) | [MIT](LICENSES/MIT-complete-hsk-vocabulary.txt) |
 | Make Me A Hanzi (`graphics.txt`) | [Arphic Public License](LICENSES/ARPHICPL.TXT) |
 | Make Me A Hanzi (`dictionary.txt`) | [LGPL v3+](LICENSES/LGPL-3.0.txt) |
 

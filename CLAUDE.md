@@ -10,6 +10,7 @@ This repo contains the data pipeline that produces the reference SQLite database
 
 | Dataset | Source | License |
 |---|---|---|
+| HSK vocabulary | [complete-hsk-vocabulary](https://github.com/drkameleon/complete-hsk-vocabulary) | MIT |
 | `graphics.txt` | [Make Me A Hanzi](https://github.com/54lihaoxin/makemeahanzi) (fork) | Arphic Public License |
 | `dictionary.txt` | [Make Me A Hanzi](https://github.com/54lihaoxin/makemeahanzi) (fork) | LGPL v3+ |
 
