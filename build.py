@@ -3,8 +3,8 @@ from pathlib import Path
 
 from ziderdata.aggregate import run as aggregate
 from ziderdata.hsk import parse as parse_hsk
-from ziderdata.makemeahanzi_dictionary import parse as parse_dictionary
-from ziderdata.makemeahanzi_graphics import parse as parse_graphics
+from ziderdata.mmah_dictionary import parse as parse_dictionary
+from ziderdata.mmah_graphics import parse as parse_graphics
 
 DEFAULT_MAKEMEAHANZI_DIR = Path('sources/makemeahanzi')
 DEFAULT_HSK_DIR = Path('sources/complete-hsk-vocabulary')

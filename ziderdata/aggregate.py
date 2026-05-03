@@ -4,7 +4,7 @@ import sqlite3
 from pathlib import Path
 
 from ziderdata.encoding import encode_median, encode_path
-from ziderdata.schema import DictionaryEntry, GraphicsEntry, HskEntry
+from ziderdata.schema import MmahDictionaryEntry, MmahGraphicsEntry, HskEntry
 
 CREATE_SCHEMA = '''
     CREATE TABLE mmah_characters (
@@ -55,7 +55,7 @@ CREATE_SCHEMA = '''
 '''
 
 
-def validate(dictionary: dict[str, DictionaryEntry], graphics: dict[str, GraphicsEntry]) -> list[str]:
+def validate(dictionary: dict[str, MmahDictionaryEntry], graphics: dict[str, MmahGraphicsEntry]) -> list[str]:
     dict_chars = set(dictionary)
     graphics_chars = set(graphics)
 
@@ -67,7 +67,7 @@ def validate(dictionary: dict[str, DictionaryEntry], graphics: dict[str, Graphic
     return sorted(dict_chars & graphics_chars)
 
 
-def _collect_etymology_types(characters: list[str], dictionary: dict[str, DictionaryEntry]) -> dict[str, int]:
+def _collect_etymology_types(characters: list[str], dictionary: dict[str, MmahDictionaryEntry]) -> dict[str, int]:
     types: dict[str, int] = {}
     for char in characters:
         ety = dictionary[char].etymology
@@ -78,8 +78,8 @@ def _collect_etymology_types(characters: list[str], dictionary: dict[str, Dictio
 
 def build_database(
     characters: list[str],
-    dictionary: dict[str, DictionaryEntry],
-    graphics: dict[str, GraphicsEntry],
+    dictionary: dict[str, MmahDictionaryEntry],
+    graphics: dict[str, MmahGraphicsEntry],
     hsk_entries: list[HskEntry],
     output_dir: Path,
 ) -> None:
@@ -153,8 +153,8 @@ def build_database(
 
 def run(
     hsk_entries: list[HskEntry],
-    mmah_dictionary_entries: list[DictionaryEntry],
-    mmah_graphics_entries: list[GraphicsEntry],
+    mmah_dictionary_entries: list[MmahDictionaryEntry],
+    mmah_graphics_entries: list[MmahGraphicsEntry],
     output_dir: Path,
 ) -> None:
     dictionary = {e.character: e for e in mmah_dictionary_entries}

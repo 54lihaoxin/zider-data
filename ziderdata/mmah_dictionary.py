@@ -3,10 +3,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from ziderdata.schema import DictionaryEntry
+from ziderdata.schema import MmahDictionaryEntry
 
 
-def parse(path: Path) -> list[DictionaryEntry]:
+def parse(path: Path) -> list[MmahDictionaryEntry]:
     entries = []
     with open(path, encoding='utf-8') as f:
         for line in f:
@@ -14,7 +14,7 @@ def parse(path: Path) -> list[DictionaryEntry]:
             if not line:
                 continue
             data = json.loads(line)
-            entries.append(DictionaryEntry(
+            entries.append(MmahDictionaryEntry(
                 character=data['character'],
                 pinyin=data.get('pinyin', []),
                 definition=data.get('definition'),

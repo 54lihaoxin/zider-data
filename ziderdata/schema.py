@@ -5,7 +5,7 @@ from typing import Any
 
 
 @dataclass
-class DictionaryEntry:
+class MmahDictionaryEntry:
     character: str
     pinyin: list[str] = field(default_factory=list)
     definition: str | None = None
@@ -16,7 +16,7 @@ class DictionaryEntry:
 
 
 @dataclass
-class GraphicsEntry:
+class MmahGraphicsEntry:
     character: str
     strokes: list[str] = field(default_factory=list)
     medians: list[list[list[int]]] = field(default_factory=list)
