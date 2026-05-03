@@ -8,17 +8,13 @@ from ziderdata.schema import MmahDictionaryEntry, MmahGraphicsEntry, HskEntry
 
 CREATE_SCHEMA = '''
     CREATE TABLE mmah_characters (
-        id                  INTEGER PRIMARY KEY,
-        character           TEXT    NOT NULL UNIQUE,
-        pinyin              TEXT,
-        definition          TEXT,
-        decomposition       TEXT,
-        radical             TEXT,
-        stroke_count        INTEGER,
-        etymology_type_id   INTEGER REFERENCES mmah_etymology_types(id),
-        etymology_hint      TEXT,
-        etymology_semantic  TEXT,
-        etymology_phonetic  TEXT
+        id                INTEGER PRIMARY KEY,
+        character         TEXT    NOT NULL UNIQUE,
+        pinyin            TEXT,
+        decomposition     TEXT,
+        radical           TEXT,
+        stroke_count      INTEGER,
+        etymology_type_id INTEGER REFERENCES mmah_etymology_types(id)
     );
 
     CREATE TABLE mmah_etymology_types (
@@ -101,21 +97,14 @@ def build_database(
 
         ety_type = ety.get('type')
         cursor = conn.execute(
-            '''INSERT INTO mmah_characters
-               (character, pinyin, definition, decomposition, radical, stroke_count,
-                etymology_type_id, etymology_hint, etymology_semantic, etymology_phonetic)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+            'INSERT INTO mmah_characters (character, pinyin, decomposition, radical, stroke_count, etymology_type_id) VALUES (?, ?, ?, ?, ?, ?)',
             (
                 d.character,
                 ' '.join(d.pinyin) if d.pinyin else None,
-                d.definition,
                 d.decomposition,
                 d.radical,
                 len(g.strokes),
                 etymology_type_ids[ety_type] if ety_type else None,
-                ety.get('hint'),
-                ety.get('semantic'),
-                ety.get('phonetic'),
             ),
         )
         character_id = cursor.lastrowid
