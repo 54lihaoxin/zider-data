@@ -148,5 +148,6 @@ def run(
 ) -> None:
     dictionary = {e.character: e for e in mmah_dictionary_entries}
     graphics = {e.character: e for e in mmah_graphics_entries}
-    valid_chars = validate(dictionary, graphics)
+    hsk_chars = {char for entry in hsk_entries for char in entry.simplified}
+    valid_chars = [c for c in validate(dictionary, graphics) if c in hsk_chars]
     build_database(valid_chars, dictionary, graphics, hsk_entries, output_dir)
