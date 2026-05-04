@@ -119,6 +119,10 @@ All coordinate values are stored as `value + 119` (unsigned). Subtract 119 to re
 Point count = `(data.count * 8) / 22`.  
 Same coordinate offset: subtract 119 from each value.
 
+### Coordinate system
+
+All coordinates (paths and medians) use Makemeahanzi convention: **origin at bottom-left, y-axis pointing up**. Observed ranges across all ~9500 characters: **x ∈ [5, 1023]**, **y ∈ [−119, 898]**. Use a scale of 1/1024 and offset y by +119 before flipping to screen space.
+
 ### Swift decoder
 
 `BitReader` reads arbitrary-width bit fields MSB first. `decodePath` reconstructs the SVG path string; `decodeMedian` returns an array of `[x, y]` integer points. Both can be used directly with the BLOBs fetched from SQLite.
