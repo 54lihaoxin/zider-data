@@ -4,6 +4,10 @@ from pathlib import Path
 
 SOURCES = [
     {
+        'url': 'https://raw.githubusercontent.com/54lihaoxin/chinese-poetry/master/%E8%92%99%E5%AD%A6/qianjiashi.json',
+        'dest': 'chinese-poetry/qianjiashi.json',
+    },
+    {
         'url': 'https://raw.githubusercontent.com/54lihaoxin/chinese-poetry/master/%E8%92%99%E5%AD%A6/tangshisanbaishou.json',
         'dest': 'chinese-poetry/tangshisanbaishou.json',
     },

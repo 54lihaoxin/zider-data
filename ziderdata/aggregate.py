@@ -51,6 +51,13 @@ CREATE_SCHEMA = '''
         text    TEXT    NOT NULL
     );
 
+    CREATE TABLE qian_jia_shi (
+        id      INTEGER PRIMARY KEY,
+        title   TEXT    NOT NULL,
+        author  TEXT    NOT NULL,
+        text    TEXT    NOT NULL
+    );
+
     CREATE TABLE hsk_word_forms (
         word_id     INTEGER NOT NULL REFERENCES hsk_words(id),
         form_index  INTEGER NOT NULL,
@@ -89,6 +96,7 @@ def build_database(
     graphics: dict[str, MmahGraphicsEntry],
     hsk_entries: list[HskEntry],
     tang_poem_entries: list[ArticleEntry],
+    qian_jia_shi_entries: list[ArticleEntry],
     output_dir: Path,
 ) -> None:
     db_path = output_dir / 'zider-data.sqlite'
@@ -152,10 +160,16 @@ def build_database(
             (i + 1, entry.title, entry.author, entry.text),
         )
 
+    for i, entry in enumerate(qian_jia_shi_entries):
+        conn.execute(
+            'INSERT INTO qian_jia_shi (id, title, author, text) VALUES (?, ?, ?, ?)',
+            (i + 1, entry.title, entry.author, entry.text),
+        )
+
     conn.commit()
     conn.execute('VACUUM')
     conn.close()
-    print(f'Wrote {len(characters)} characters, {len(hsk_entries)} words, and {len(tang_poem_entries)} tang poems to {db_path}')
+    print(f'Wrote {len(characters)} characters, {len(hsk_entries)} words, {len(tang_poem_entries)} tang poems, and {len(qian_jia_shi_entries)} qian jia shi poems to {db_path}')
 
 
 def run(
@@ -163,6 +177,7 @@ def run(
     mmah_dictionary_entries: list[MmahDictionaryEntry],
     mmah_graphics_entries: list[MmahGraphicsEntry],
     tang_poem_entries: list[ArticleEntry],
+    qian_jia_shi_entries: list[ArticleEntry],
     output_dir: Path,
 ) -> None:
     dictionary = {e.character: e for e in mmah_dictionary_entries}
@@ -173,11 +188,17 @@ def run(
         for text in (entry.simplified, _s2t.convert(entry.simplified))
         for char in text
     }
+    qian_jia_shi_chars = {
+        char
+        for entry in qian_jia_shi_entries
+        for text in (entry.title, entry.author, entry.text)
+        for char in text
+    }
     tang_chars = {
         char
         for entry in tang_poem_entries
         for text in (entry.title, entry.author, entry.text)
         for char in text
     }
-    valid_chars = [c for c in validate(dictionary, graphics) if c in hsk_chars | tang_chars]
-    build_database(valid_chars, dictionary, graphics, hsk_entries, tang_poem_entries, output_dir)
+    valid_chars = [c for c in validate(dictionary, graphics) if c in hsk_chars | tang_chars | qian_jia_shi_chars]
+    build_database(valid_chars, dictionary, graphics, hsk_entries, tang_poem_entries, qian_jia_shi_entries, output_dir)
