@@ -4,7 +4,11 @@ from pathlib import Path
 
 SOURCES = [
     {
-        'url': 'https://raw.githubusercontent.com/drkameleon/complete-hsk-vocabulary/main/complete.json',
+        'url': 'https://raw.githubusercontent.com/54lihaoxin/chinese-poetry/master/%E8%92%99%E5%AD%A6/tangshisanbaishou.json',
+        'dest': 'chinese-poetry/tangshisanbaishou.json',
+    },
+    {
+        'url': 'https://raw.githubusercontent.com/54lihaoxin/complete-hsk-vocabulary/main/complete.json',
         'dest': 'complete-hsk-vocabulary/complete.json',
     },
     {

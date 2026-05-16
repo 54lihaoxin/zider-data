@@ -5,7 +5,7 @@ from pathlib import Path
 
 from opencc import OpenCC
 from ziderdata.encoding import encode_median, encode_path
-from ziderdata.schema import MmahDictionaryEntry, MmahGraphicsEntry, HskEntry
+from ziderdata.schema import ArticleEntry, MmahDictionaryEntry, MmahGraphicsEntry, HskEntry
 
 _s2t = OpenCC('s2t')
 
@@ -42,6 +42,13 @@ CREATE_SCHEMA = '''
         hsk_old     INTEGER,
         hsk_new     INTEGER,
         hsk_newest  INTEGER
+    );
+
+    CREATE TABLE tang_poems (
+        id      INTEGER PRIMARY KEY,
+        title   TEXT    NOT NULL,
+        author  TEXT    NOT NULL,
+        text    TEXT    NOT NULL
     );
 
     CREATE TABLE hsk_word_forms (
@@ -81,6 +88,7 @@ def build_database(
     dictionary: dict[str, MmahDictionaryEntry],
     graphics: dict[str, MmahGraphicsEntry],
     hsk_entries: list[HskEntry],
+    tang_poem_entries: list[ArticleEntry],
     output_dir: Path,
 ) -> None:
     db_path = output_dir / 'zider-data.sqlite'
@@ -138,16 +146,23 @@ def build_database(
                 ),
             )
 
+    for i, entry in enumerate(tang_poem_entries):
+        conn.execute(
+            'INSERT INTO tang_poems (id, title, author, text) VALUES (?, ?, ?, ?)',
+            (i + 1, entry.title, entry.author, entry.text),
+        )
+
     conn.commit()
     conn.execute('VACUUM')
     conn.close()
-    print(f'Wrote {len(characters)} characters and {len(hsk_entries)} words to {db_path}')
+    print(f'Wrote {len(characters)} characters, {len(hsk_entries)} words, and {len(tang_poem_entries)} tang poems to {db_path}')
 
 
 def run(
     hsk_entries: list[HskEntry],
     mmah_dictionary_entries: list[MmahDictionaryEntry],
     mmah_graphics_entries: list[MmahGraphicsEntry],
+    tang_poem_entries: list[ArticleEntry],
     output_dir: Path,
 ) -> None:
     dictionary = {e.character: e for e in mmah_dictionary_entries}
@@ -158,5 +173,11 @@ def run(
         for text in (entry.simplified, _s2t.convert(entry.simplified))
         for char in text
     }
-    valid_chars = [c for c in validate(dictionary, graphics) if c in hsk_chars]
-    build_database(valid_chars, dictionary, graphics, hsk_entries, output_dir)
+    tang_chars = {
+        char
+        for entry in tang_poem_entries
+        for text in (entry.title, entry.author, entry.text)
+        for char in text
+    }
+    valid_chars = [c for c in validate(dictionary, graphics) if c in hsk_chars | tang_chars]
+    build_database(valid_chars, dictionary, graphics, hsk_entries, tang_poem_entries, output_dir)

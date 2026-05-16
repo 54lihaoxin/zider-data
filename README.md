@@ -94,6 +94,19 @@ One row per stroke, in stroke order. Paths and medians are stored as compact bit
 
 Primary key is `(character_id, stroke_index)`.
 
+### `tang_poems`
+
+One row per poem from 《唐诗三百首》 (*Three Hundred Tang Poems*). Ordered by the original anthology sequence.
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | INTEGER PK | Position in the anthology (1–319) |
+| `title` | TEXT | Poem title in simplified Chinese |
+| `author` | TEXT | Poet name in simplified Chinese |
+| `poem` | TEXT | Full poem text with punctuation replaced by spaces |
+
+Source: [`chinese-poetry/chinese-poetry`](https://github.com/chinese-poetry/chinese-poetry) (`蒙学/tangshisanbaishou.json`). Content is traditional Chinese converted to simplified via OpenCC.
+
 ## Stroke binary format
 
 Stroke paths and medians are stored as compact bit streams (MSB first) in the `strokes` table.
@@ -176,3 +189,4 @@ Pipeline scripts are MIT licensed. Data files retain their upstream licenses:
 | HSK vocabulary | [drkameleon/complete-hsk-vocabulary](https://github.com/drkameleon/complete-hsk-vocabulary) | [MIT](LICENSES/MIT-complete-hsk-vocabulary.txt) |
 | Character dictionary (`dictionary.txt`) | [skishore/makemeahanzi](https://github.com/skishore/makemeahanzi) | [LGPL v3+](LICENSES/LGPL-3.0.txt) |
 | Character stroke data (`graphics.txt`) | [skishore/makemeahanzi](https://github.com/skishore/makemeahanzi) | [Arphic Public License](LICENSES/ARPHICPL.TXT) |
+| Tang poems (`tangshisanbaishou.json`) | [chinese-poetry/chinese-poetry](https://github.com/chinese-poetry/chinese-poetry) | [MIT](LICENSES/ATTRIBUTION-chinese-poetry.txt) |

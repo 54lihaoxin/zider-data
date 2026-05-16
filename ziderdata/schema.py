@@ -24,6 +24,13 @@ class HskForm:
 
 
 @dataclass
+class ArticleEntry:
+    title: str
+    author: str
+    text: str
+
+
+@dataclass
 class MmahDictionaryEntry:
     character: str
     pinyin: list[str] = field(default_factory=list)
